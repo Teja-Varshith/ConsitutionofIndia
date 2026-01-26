@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "683682163179",
+    "project_id": "indianconstitution-a306a",
+    "storage_bucket": "indianconstitution-a306a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683682163179:android:0ae54442db0ed46c4351ae",
+        "android_client_info": {
+          "package_name": "com.example.coi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7LMZbOBs18P1DENSWeN6INujAlOvyZ9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

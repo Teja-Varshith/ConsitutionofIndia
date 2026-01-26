@@ -1,17 +1,24 @@
+import 'package:coi/app/providers.dart';
 import 'package:coi/features/auth/view/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
   Widget build(BuildContext context) {
+    final theme = ref.watch(appThemeProvider);
     return  Scaffold(
-      appBar: _header(),
-      backgroundColor:  Color(0xFF2d2d31),
+      backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: _bottomNav(),
       
       body: SafeArea(
@@ -21,15 +28,16 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+                _header(theme,ref),
                
                
-                const Text("Explore Constitution",
-                    style: TextStyle(color: Colors.white, fontSize: 18)),
+                const Text("Explore Constitution",),
                 const SizedBox(height: 16),
                 _gridSection(),
                 const SizedBox(height: 20),
                 const Text("BILLS",
-                    style: TextStyle(color: Colors.white, fontSize: 18)),
+                   ),
                 const SizedBox(height: 16),
                 _touristSection(),
               ],
@@ -40,8 +48,19 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-PreferredSizeWidget _header() {
+Widget _header(ThemeMode theme, WidgetRef ref) {
   return AppBar(
+    actions: [
+      IconButton(onPressed:
+        () {
+          ref.read(appThemeProvider.notifier).state = theme == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+        }, 
+        icon: Icon(
+        theme == ThemeMode.light ? Icons.dark_mode : Icons.light_mode,
+        )  
+      ),
+    ],
+    elevation: 5,
     backgroundColor:  Color(0xFF2d2d31),
     
     automaticallyImplyLeading: false,
@@ -98,7 +117,6 @@ PreferredSizeWidget _header() {
   );
 }
 
-
 Widget _gridSection() {
     return Column(
       children: [
@@ -141,6 +159,7 @@ Widget _gridSection() {
       ],
     );
   }
+
 Widget _card({
   required Color color,
   required String svgPath,
@@ -220,8 +239,6 @@ Widget _card({
   );
 }
 
-
-
   Widget _touristSection() {
     return Column(
       children: [
@@ -271,27 +288,6 @@ Widget _card({
   }
 
   // Widget _tourCard(IconData icon, String title) {
-  //   return Expanded(
-  //     child: Container(
-  //       height: 120,
-  //       padding: const EdgeInsets.all(16),
-  //       decoration: BoxDecoration(
-  //         color: Colors.grey[900],
-  //         borderRadius: BorderRadius.circular(16),
-  //       ),
-  //       child: Column(
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           Icon(icon, color: Colors.white),
-  //           const Spacer(),
-  //           Text(title,
-  //               style: const TextStyle(color: Colors.white, fontSize: 16)),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget _bottomNav() {
     return BottomAppBar(
       shape: CircularNotchedRectangle(),

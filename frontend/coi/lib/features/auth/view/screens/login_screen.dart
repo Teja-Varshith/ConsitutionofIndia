@@ -1,15 +1,43 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
 
-class Loginscreen extends StatefulWidget {
+class Loginscreen extends ConsumerStatefulWidget {
   const Loginscreen({super.key});
 
   @override
-  State<Loginscreen> createState() => _LoginscreenState();
+  ConsumerState<Loginscreen> createState() => _LoginscreenState();
 }
 
-class _LoginscreenState extends State<Loginscreen> {
+class _LoginscreenState extends ConsumerState<Loginscreen> {
+
+
+  Future<void> _onLogin() async{
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    if (googleUser == null) return null;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
+    final UserMeta  = (await FirebaseAuth.instance.signInWithCredential(credential)).user;
+
+    if(UserMeta != null) {
+      final userEmail = UserMeta.email;
+      final userName = UserMeta.displayName;
+      final photoUrl = UserMeta.photoURL;
+  }
+
+  return;
+
+  }
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
