@@ -1,0 +1,18 @@
+[
+  {
+    "part_number": 3,
+    "part_name_en": "Fundamental Rights",
+    "part_name_hi": "मौलिक अधिकार",
+    "articles": [
+      {
+        "article_number": 14,
+        "title_en": "Equality before law",
+        "title_hi": "कानून के समक्ष समानता",
+        "bare_en": "The State shall not deny to any person equality before the law or the equal protection of the laws within the territory of India.",
+        "bare_hi": "राज्य भारत के क्षेत्र में किसी भी व्यक्ति को कानून के समक्ष समानता या कानूनों के समान संरक्षण से वंचित नहीं करेगा।",
+        "simplified_en": "This article means that everyone is treated equally under the law. No one is above the law.",
+        "simplified_hi": "इस अनुच्छेद का अर्थ है कि कानून के सामने सभी समान हैं। कोई भी कानून से ऊपर नहीं है।"
+      }
+    ]
+  }
+]

@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "683682163179",
+    "project_id": "indianconstitution-a306a",
+    "storage_bucket": "indianconstitution-a306a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683682163179:android:0ae54442db0ed46c4351ae",
+        "android_client_info": {
+          "package_name": "com.example.coi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "683682163179-tq4f55jm3npe3gn920npaan8p1v8mn2p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.coi",
+            "certificate_hash": "ab1f4337db6512c73eb8b46174fd6e8dc3b0deef"
+          }
+        },
+        {
+          "client_id": "683682163179-f45008idcqdegvofm4hgrbohtlp2vprv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7LMZbOBs18P1DENSWeN6INujAlOvyZ9w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "683682163179-f45008idcqdegvofm4hgrbohtlp2vprv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "683682163179-a8aeanu56j2qr5jqh6b1ndjjgtt0eehc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.coi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
