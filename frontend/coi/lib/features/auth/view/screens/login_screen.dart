@@ -1,3 +1,5 @@
+import 'package:coi/app/providers.dart';
+import 'package:coi/features/auth/controller/auth_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,46 +17,31 @@ class Loginscreen extends ConsumerStatefulWidget {
 class _LoginscreenState extends ConsumerState<Loginscreen> {
 
 
-  Future<void> _onLogin() async{
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    if (googleUser == null) return null;
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-    final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
-    final UserMeta  = (await FirebaseAuth.instance.signInWithCredential(credential)).user;
-
-    if(UserMeta != null) {
-      final userEmail = UserMeta.email;
-      final userName = UserMeta.displayName;
-      final photoUrl = UserMeta.photoURL;
-  }
-
-  return;
-
-  }
-
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
       backgroundColor: const Color.fromARGB(255, 76, 237, 255),
       resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 85,
+        child: LayoutBuilder(
+          builder:(context, constraints) {
+           return SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    RepaintBoundary(child: _loginAnimation()),
+                    const SizedBox(height: 150,),
+                    Expanded(child: _loginContainer(ref)),
+                              ],
+                ),
+              ),
             ),
-            _loginAnimation(),
-            SizedBox(
-              height:70,
-            ),
-            _loginContainer(),
-                      ],
+          );
+          }
         ),
       )
     );
@@ -62,18 +49,19 @@ class _LoginscreenState extends ConsumerState<Loginscreen> {
 } 
 
 
-Widget _loginAnimation()
-{
-  return Container(
-    height: 260,
-    width: 280,
-    child: Lottie.asset('assets/login_screen_animation1.json'),
+Widget _loginAnimation(){
+  return Padding(
+    padding: EdgeInsets.only(top: 80),
+    child: Container(
+      height: 250,
+      width: double.infinity,
+      child: Lottie.asset('assets/login_screen_animation1.json'),
+    ),
   );
 }
 
-Widget _loginContainer()
-{
-  return Expanded(child: Container(
+Widget _loginContainer(WidgetRef ref){
+  return Container(
     padding: EdgeInsets.all(24),
     
     decoration: BoxDecoration(
@@ -84,51 +72,81 @@ Widget _loginContainer()
       )
     ),
     child: Column(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text('Your Complete Guide to Indian Constitution',style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-          height: 1.2,
-        ),),
+
         SizedBox(height: 20,),
-        Text('Simplified articles, real-world stories, and current bills — all in one app.',style: TextStyle(
-          fontWeight: FontWeight.normal,
-          color: Colors.grey,
-          fontSize: 12,
-          height: 1.5,
-        ),),
-        SizedBox(
-          height: 30,
+        Text(
+              'Your Complete Guide to Indian Constitution',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 28,
+                height: 1.2,
+              ),
+            ),
+
+            SizedBox(height: 10,),
+
+
+        Text(
+                                    'Use your College Credentials to Sign in instantly. No hassle, Just vibes!',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+
+
+        Spacer(),
+        CustomButton(
+          onTap:  () async {
+  final userModel = await ref
+      .read(authControllerProvider.notifier)
+      .signInWithGoogle();
+
+  if (userModel != null) {
+    ref.read(UserProvider.notifier).state = userModel;
+  }
+},
+
+          text: 'Continue with Google',
+          iconPath: 'assets/images/google.svg',
         ),
-        CustomButton(),
+
+        SizedBox(height: 80,),
       ],
     ),
     
     
-  ));
+  );
 }
 
 class CustomButton extends StatefulWidget {
-  // final String text;
-  // final icons;
-  // final Color backgroundColor;
-  // final double fontsize;
-  // final Color bordercolor;
-  // final Color gradientcolor1;
-  // final Color gradientcolor2;
+  final String text;
+  final VoidCallback onTap;
+  final String? iconPath;
+  final Widget? icon;
+  final double? height;
+  final EdgeInsets? margin;
+  final BorderRadius? borderRadius;
+  final Gradient? gradient;
+  final Color? borderColor;
+  final Color? backgroundColor;
+  final TextStyle? textStyle;
 
-
-
-
-  const CustomButton({super.key,
-  //  required this.text,
-  //  this.icons,
-  //  required this.backgroundColor,
-  //  required this.bordercolor,
-  //  required this.gradientcolor1,
-  //  required this.gradientcolor2,
-  //  required this.fontsize,   
-
+  const CustomButton({
+    super.key,
+    required this.text,
+    required this.onTap,
+    this.iconPath,
+    this.icon,
+    this.height,
+    this.margin,
+    this.borderRadius,
+    this.gradient,
+    this.borderColor,
+    this.backgroundColor,
+    this.textStyle,
   });
 
   @override
@@ -137,11 +155,13 @@ class CustomButton extends StatefulWidget {
 
 class _CustomButtonState extends State<CustomButton> {
   bool _isPressed = false;
-  
-  
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
+
     return GestureDetector(
       onTapDown: (_) {
         setState(() => _isPressed = true);
@@ -152,72 +172,65 @@ class _CustomButtonState extends State<CustomButton> {
       onTapCancel: () {
         setState(() => _isPressed = false);
       },
-      onTap: () {
-        print("Button Pressed");
-      },
+      onTap: widget.onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 120),
         curve: Curves.easeOut,
-
-        // 🔽 Move button down when pressed
         transform: Matrix4.translationValues(
           0,
           _isPressed ? 4 : 0,
           0,
         ),
-
-        margin:  EdgeInsets.symmetric(horizontal: 10),
-        height: 62,
-
+        margin: widget.margin ?? const EdgeInsets.symmetric(horizontal: 10),
+        height: widget.height ?? 62,
         decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(16),
-      border: Border(top: BorderSide(
-          color: Colors.grey,
-          width: 2,
-        ),left: BorderSide(
-          color: Colors.grey,
-          width: 2,
-        ), right: BorderSide(
-          color: Colors.grey,
-          width: 2,
-        ),),
-
-          // Gradient for depth
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF3A3A3A),
-              Color(0xFF2A2A2A),
-            ],
+          borderRadius: widget.borderRadius ?? BorderRadius.circular(16),
+          border: Border(
+            top: BorderSide(
+              color: widget.borderColor ?? colorScheme.outline,
+              width: 2,
+            ),
+            left: BorderSide(
+              color: widget.borderColor ?? colorScheme.outline,
+              width: 2,
+            ),
+            right: BorderSide(
+              color: widget.borderColor ?? colorScheme.outline,
+              width: 2,
+            ),
           ),
-
-          // Shadow changes on press
+          color: widget.gradient == null 
+              ? (widget.backgroundColor ?? colorScheme.surface) 
+              : null,
+          gradient: widget.gradient,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.6),
-              blurRadius: _isPressed ? 1 :0,
+              blurRadius: _isPressed ? 1 : 0,
               offset: Offset(0, _isPressed ? 2 : 6),
             ),
           ],
         ),
-
         child: Center(
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset('assets/images/google.svg',
-              height: 24,
-              ),
-              // SizedBox(width: 10),
-              Text(
-                'Sign Up With Google',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
+              if (widget.icon != null)
+                widget.icon!
+              else if (widget.iconPath != null)
+                SvgPicture.asset(
+                  widget.iconPath!,
+                  height: 24,
+                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal:  8.0),
+                child: Text(
+                  widget.text,
+                  style: widget.textStyle ?? 
+                      textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
                 ),
               ),
             ],

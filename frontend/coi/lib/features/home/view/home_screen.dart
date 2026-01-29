@@ -1,4 +1,5 @@
 import 'package:coi/app/providers.dart';
+import 'package:coi/features/auth/controller/auth_controller.dart';
 import 'package:coi/features/auth/view/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +18,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
+    final user = ref.read(UserProvider);
     return  Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: _bottomNav(),
@@ -33,8 +35,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                
                
                 const Text("Explore Constitution",),
+
+                Text(user.toString()),
+
                 const SizedBox(height: 16),
-                _gridSection(),
+                GestureDetector(
+                  onTap: () {
+                    ref.read(authControllerProvider.notifier).logOut();
+                  },
+                  child: _gridSection()),
                 const SizedBox(height: 20),
                 const Text("BILLS",
                    ),

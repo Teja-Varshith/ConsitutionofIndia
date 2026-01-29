@@ -57,6 +57,7 @@ class _CustomButtonState extends State<CustomButton> {
         // print("Button Pressed");
       },
       child: AnimatedContainer(
+
         duration: const Duration(milliseconds: 120),
         curve: Curves.easeOut,
 
@@ -69,9 +70,10 @@ class _CustomButtonState extends State<CustomButton> {
 
         margin: const EdgeInsets.symmetric(horizontal: 10),
         height: widget.buttonheight,
-        width: 300,
+        width: double.infinity,
 
         decoration: BoxDecoration(
+
       borderRadius: BorderRadius.circular(16),
       border: Border(top: BorderSide(
           color: widget.bordercolor,

@@ -70,6 +70,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '683682163179',
     projectId: 'indianconstitution-a306a',
     storageBucket: 'indianconstitution-a306a.firebasestorage.app',
+    androidClientId: '683682163179-tq4f55jm3npe3gn920npaan8p1v8mn2p.apps.googleusercontent.com',
+    iosClientId: '683682163179-a8aeanu56j2qr5jqh6b1ndjjgtt0eehc.apps.googleusercontent.com',
     iosBundleId: 'com.example.coi',
   );
+
 }
