@@ -22,10 +22,30 @@ class App extends ConsumerStatefulWidget {
 class _AppState extends ConsumerState<App> {
     UserModel? userModel;
 
+
+    @override
+void initState() {
+  super.initState();
+
+  Future.microtask(() {
+    final user = ref.read(FirebaseAuthProvider).currentUser;
+    if (user != null) {
+      getData(ref, user);
+    }
+  });
+}
+
+
   void getData(WidgetRef ref, User data) async {
-               userModel = await ref.watch(authControllerProvider.notifier).getUserData(data.uid).first;
-           ref.read(UserProvider.notifier).update((state) => userModel);
-  }
+  ref
+      .watch(authControllerProvider.notifier)
+      .getUserData(data.uid)
+      .where((user) => user != null)
+      .listen((user) {
+        ref.read(UserProvider.notifier).state = user;
+      });
+}
+
 
 
 
@@ -33,14 +53,12 @@ class _AppState extends ConsumerState<App> {
   @override
 Widget build(BuildContext context) {
   final authState = ref.watch(authStateChanges);
-  final bootstrap = ref.watch(authBootstrapProvider);
 
-  return bootstrap.when(
-    loading: () => const Center(child: CircularProgressIndicator()),
-    error: (e, _) => Center(child: Text(e.toString())),
-    data: (_) {
-      return authState.when(
+  return authState.when(
         data: (user) {
+          if(user != null){
+            getData(ref, user);
+          } 
           return MaterialApp.router(
             routerDelegate: RoutemasterDelegate(
               routesBuilder: (_) {
@@ -59,8 +77,6 @@ Widget build(BuildContext context) {
             const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text(e.toString())),
       );
-    },
-  );
 }
 
 }

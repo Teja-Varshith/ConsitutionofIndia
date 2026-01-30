@@ -103,10 +103,6 @@ Widget _loginContainer(WidgetRef ref){
   final userModel = await ref
       .read(authControllerProvider.notifier)
       .signInWithGoogle();
-
-  if (userModel != null) {
-    ref.read(UserProvider.notifier).state = userModel;
-  }
 },
 
           text: 'Continue with Google',

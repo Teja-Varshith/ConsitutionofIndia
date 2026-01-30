@@ -1,6 +1,7 @@
 import 'package:coi/app/providers.dart';
 import 'package:coi/features/auth/controller/auth_controller.dart';
 import 'package:coi/features/auth/view/widgets/custom_button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,10 +16,11 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(appThemeProvider);
-    final user = ref.read(UserProvider);
+    final user = ref.watch(UserProvider);
     return  Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       bottomNavigationBar: _bottomNav(),
@@ -37,6 +39,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 const Text("Explore Constitution",),
 
                 Text(user.toString()),
+
+                Text(FirebaseAuth.instance.currentUser.toString()),
 
                 const SizedBox(height: 16),
                 GestureDetector(

@@ -31,18 +31,3 @@ final FirebaseAuthProvider = Provider((ref) {
   return FirebaseAuth.instance;
 });
 
-
-final authBootstrapProvider = FutureProvider<void>((ref) async {
-  final authRepo = ref.watch(AuthRepositoryProvider);
-
-  final user = await authRepo.getAuthStateChanges().first;
-
-  if (user != null) {
-    final userModel =
-        await authRepo.getUserData(user.uid).first;
-
-    ref.read(UserProvider.notifier).state = userModel;
-  } else {
-    ref.read(UserProvider.notifier).state = null;
-  }
-});
