@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/legacy.dart';
 final authControllerProvider =
     StateNotifierProvider<AuthController, bool>((ref) {
   final authRepository = ref.watch(AuthRepositoryProvider);
-  return AuthController(authRepository: authRepository);
+  return AuthController(authRepository: authRepository, ref: ref);
 });
 
 final authStateChanges = StreamProvider<User?>((ref) {
@@ -20,7 +20,8 @@ final authStateChanges = StreamProvider<User?>((ref) {
 
 class AuthController extends StateNotifier<bool> {
   final AuthRepository authRepository;
-  AuthController({required this.authRepository}) : super(false);
+  final Ref ref;
+  AuthController({required this.authRepository, required this.ref}) : super(false);
 
   Stream<User?> get authStateChnages => authRepository.getAuthStateChanges();
 
